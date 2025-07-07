@@ -82,6 +82,15 @@
             border-radius: 4px;
             display: none; /* Başlangıçta gizli */
         }
+        .error-message {
+            color: #EF4444; /* Kırmızı renk */
+            background-color: #FEE2E2; /* Açık kırmızı arka plan */
+            border-left: 4px solid #DC2626; /* Koyu kırmızı kenarlık */
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+            display: none;
+        }
 
 
         /* Full-screen modal for image display */
@@ -272,7 +281,7 @@
             const modalImage = document.getElementById('modalImage');
             const closeModal = document.getElementById('closeModal');
 
-            const visitorCountElement = document.getElementById('visitor-count'); // Get visitor count element once
+            const visitorCountElement = document.getElementById('visitor-count'); // Ziyaretçi sayacı elementini bir kez al
 
             // Firebase Yapılandırması ve Başlatılması
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -295,7 +304,7 @@
                 }
 
                 // Ziyaretçi sayacını güncelle (eğer Firestore kullanılıyorsa)
-                if (visitorCountElement) { // Check if element exists before using
+                if (visitorCountElement) { // Elementin varlığını kontrol et
                     const counterDocRef = doc(db, `artifacts/${appId}/public/data/visitor_counter/total_visits`);
                     await setDoc(counterDocRef, { count: increment(1) }, { merge: true });
 
@@ -308,12 +317,12 @@
                         }
                     });
                 } else {
-                    console.error("Visitor count element (ID 'visitor-count') not found in DOM. Visitor count will not be displayed.");
+                    console.error("Ziyaretçi sayacı elementi (ID 'visitor-count') DOM'da bulunamadı. Ziyaretçi sayısı gösterilmeyecektir.");
                 }
 
             } catch (error) {
                 console.error("Firebase başlatılırken veya oturum açılırken hata oluştu:", error);
-                if (visitorCountElement) { // Check if element exists before using
+                if (visitorCountElement) { // Elementin varlığını kontrol et
                     visitorCountElement.textContent = 'Hata!';
                 }
             }
@@ -325,12 +334,12 @@
                     description: "İnsanlık tarihinin en uzun dönemi olan Paleolitik Çağ, avcı-toplayıcı yaşam tarzı ve basit taş aletlerle karakterize edilir.",
                     influencers: ["Mağara Ressamları", "İlkel Zanaatkarlar"],
                     costumes: [
-                        { type: "Kadın", description: "Hayvan derilerinden yapılmış, ilkel dikişlerle birleştirilmiş giysiler.", imagePrompt: "Realistic photo of a Paleolithic era woman costume, featuring primitive clothing made from animal hides and furs, with simple stitching. The setting is a prehistoric cave or natural landscape. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Hayvan derilerinden ve postlarından yapılmış basit giysiler.", imagePrompt: "Realistic photo of a Paleolithic era man costume, featuring primitive clothing made from animal hides and furs, with simple stitching. The setting is a prehistoric cave or natural landscape. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Genel olarak avlanan hayvanların derileri ve bitkisel lifler kullanılırdı.", imagePrompt: "Realistic photo of a Paleolithic era commoner costume, featuring primitive clothing made from animal hides and furs, with simple stitching. The setting is a prehistoric cave or natural landscape. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Hayvan derilerinden yapılmış, ilkel dikişlerle birleştirilmiş giysiler.", imagePlaceholder: "Paleolitik Kadın Kostümü" },
+                        { type: "Erkek", description: "Hayvan derilerinden ve postlarından yapılmış basit giysiler.", imagePlaceholder: "Paleolitik Erkek Kostümü" },
+                        { type: "Halk", description: "Genel olarak avlanan hayvanların derileri ve bitkisel lifler kullanılırdı.", imagePlaceholder: "Paleolitik Halk Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Bu dönemde kalıcı yapılar yerine, mağaralar ve geçici barınaklar kullanılırdı. Mağara resimleri, dönemin sanatsal ifadesini yansıtır.", imagePrompt: "Realistic photo of Paleolithic era architecture, focusing on natural shelters like caves and temporary huts. Show primitive rock art or simple stone arrangements. The setting is a rugged natural landscape. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Bu dönemde kalıcı yapılar yerine, mağaralar ve geçici barınaklar kullanılırdı. Mağara resimleri, dönemin sanatsal ifadesini yansıtır.", imagePlaceholder: "Paleolitik Mimari" }
                     ]
                 },
                 "antik-misir": {
@@ -338,13 +347,13 @@
                     description: "Mısır uygarlığı, Nil Nehri çevresinde gelişmiş, piramitleri, hiyeroglifleri ve tanrı-kral inançlarıyla tanınır.",
                     influencers: ["Imhotep (Mimar)", "Dönemin Zanaatkarları"],
                     costumes: [
-                        { type: "Kadın", description: "Ketenden yapılmış, genellikle beyaz renkli, drapeli elbiseler.", imagePrompt: "Realistic photo of an Ancient Egyptian woman costume, made of linen, often white and draped. Emphasize details like jewelry and wigs. The setting is an ancient Egyptian temple or a Nile riverbank. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Ketenden yapılmış, 'şenti' adı verilen etek benzeri giysiler.", imagePrompt: "Realistic photo of an Ancient Egyptian man costume, made of linen, 'shenti' kilt-like garments. The setting is an ancient Egyptian temple or a Nile riverbank. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Saray/Üst Sınıf", description: "Daha ince ketenler, mücevherler ve peruklarla süslenmiş giysiler.", imagePrompt: "Realistic photo of an Ancient Egyptian noble costume, featuring finer linens, elaborate jewelry, and ornate wigs. The setting is a lavish palace or temple interior. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Basit keten etekler, deri zırhlar ve kalkanlar.", imagePrompt: "Realistic photo of an Ancient Egyptian military costume, featuring simple linen kilts, leather armor, and shields. The setting is a battlefield or a military parade. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Ketenden yapılmış, genellikle beyaz renkli, drapeli elbiseler.", imagePlaceholder: "Antik Mısır Kadın Kostümü" },
+                        { type: "Erkek", description: "Ketenden yapılmış, 'şenti' adı verilen etek benzeri giysiler.", imagePlaceholder: "Antik Mısır Erkek Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "Daha ince ketenler, mücevherler ve peruklarla süslenmiş giysiler.", imagePlaceholder: "Antik Mısır Saray Kostümü" },
+                        { type: "Askeri", description: "Basit keten etekler, deri zırhlar ve kalkanlar.", imagePlaceholder: "Antik Mısır Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Piramitler, tapınaklar ve büyük heykeller, dönemin mimarisinin temelini oluşturur. Taş işçiliği ve monumental yapılar öne çıkar.", imagePrompt: "Realistic photo of Ancient Egyptian architecture, featuring monumental structures like pyramids, temples with massive columns, and large statues. Emphasize stone craftsmanship and grand scale. The setting is a desert landscape or a Nile riverbank. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Piramitler, tapınaklar ve büyük heykeller, dönemin mimarisinin temelini oluşturur. Taş işçiliği ve monumental yapılar öne çıkar.", imagePlaceholder: "Antik Mısır Mimari" }
                     ]
                 },
                 "roma-imparatorlugu": {
@@ -352,13 +361,13 @@
                     description: "Antik Roma, geniş toprakları, gelişmiş hukuk sistemi, mühendislik harikaları ve askeri gücüyle bilinir.",
                     influencers: ["Vitruvius (Mimar ve Yazar)", "Bilinmeyen Roma Mühendisleri"],
                     costumes: [
-                        { type: "Kadın", description: "Stola ve palla gibi drapeli yün ve keten giysiler.", imagePrompt: "Roman woman wearing a flowing stola and palla, with a golden belt and sandals, in a classical Roman setting. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Toga, tunik gibi yün giysiler.", imagePrompt: "Roman man wearing a draped toga and simple tunic, with sandals, in a classical Roman setting. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Saray/Üst Sınıf", description: "Mor renkler, ipek ve altın işlemelerle süslenmiş daha gösterişli giysiler.", imagePrompt: "Roman aristocratic figure in an ornate, richly embroidered toga or stola, adorned with jewels, in a luxurious classical Roman palace setting. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Zırhlar, kasklar ve kalkanlarla donatılmış lejyoner kıyafetleri.", imagePrompt: "Roman legionary in full segmented plate armor (lorica segmentata), with a galean helmet and scutum shield, on a classical Roman battlefield or city street. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Stola ve palla gibi drapeli yün ve keten giysiler.", imagePlaceholder: "Roma Kadın Kostümü" },
+                        { type: "Erkek", description: "Toga, tunik gibi yün giysiler.", imagePlaceholder: "Roma Erkek Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "Mor renkler, ipek ve altın işlemelerle süslenmiş daha gösterişli giysiler.", imagePlaceholder: "Roma Saray Kostümü" },
+                        { type: "Askeri", description: "Zırhlar, kasklar ve kalkanlarla donatılmış lejyoner kıyafetleri.", imagePlaceholder: "Roma Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Kemerler, kubbeler, beton kullanımı, amfi tiyatrolar, hamamlar ve yollar Roma mimarisinin karakteristik özellikleridir.", imagePrompt: "Realistic photo of Roman Empire architecture, showcasing grand structures with prominent arches, sturdy columns, and large domes. Examples include amphitheatres, aqueducts, and bathhouses, built with concrete. The setting is a bustling Roman city or a serene countryside with Roman ruins. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Kemerler, kubbeler, beton kullanımı, amfi tiyatrolar, hamamlar ve yollar Roma mimarisinin karakteristik özellikleridir.", imagePlaceholder: "Roma Mimari" }
                     ]
                 },
                 "orta-cag": {
@@ -366,14 +375,14 @@
                     description: "Avrupa'da Roma İmparatorluğu'nın çöküşünden Rönesans'a kadar süren dönem. Feodalizm, kilisenin etkisi ve şövalyeler dönemi.",
                     influencers: ["Cimabue (Ressam)", "Giotto (Ressam)", "Anonim Gotik Mimarlar"],
                     costumes: [
-                        { type: "Kadın", description: "Uzun elbiseler, genellikle yün veya keten. Başörtüleri yaygındı.", imagePrompt: "Realistic photo of a Middle Ages woman wearing a long, modest dress, typically made of wool or linen. Her head is covered with a veil or wimple. The setting is a medieval village or castle interior, reflecting the daily life of the period. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Tunikler, pantolonlar (hose) ve pelerinler.", imagePrompt: "Realistic photo of a Middle Ages man wearing a tunic, hose (tights), and a simple cloak. The fabric is practical wool or linen. He is depicted in a medieval town square or working in a field, showing the common attire of the period. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Basit, dayanıklı yün giysiler. Köylü yaşam tarzını yansıtır.", imagePrompt: "Realistic photo of a Middle Ages commoner (peasant) wearing simple, durable wool or coarse linen clothing. The attire is functional and reflects the hardships of peasant life. The setting is a rural medieval landscape or a humble dwelling. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Saray/Üst Sınıf", description: "Daha zengin kumaşlar (ipek, kadife), süslü işlemeler ve gösterişli şapkalar.", imagePrompt: "Realistic photo of a Middle Ages noble man and woman in elaborate court attire, made from rich fabrics like silk, velvet, and brocade, adorned with intricate embroidery, jewels, and furs. The woman wears a long, flowing gown with a fitted bodice and an ornate headpiece. The man wears a decorated tunic, hose, and a grand cloak. The setting is a lavish medieval castle hall or a royal courtyard. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Zırhlar (zincir zırh, levha zırh), miğferler ve kılıçlar.", imagePrompt: "Realistic photo of a Middle Ages knight in full plate armor or chainmail, holding a sword and shield. The helmet is typical of the medieval period. The setting is a battlefield or a castle courtyard, emphasizing the military aspect of the era. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Uzun elbiseler, genellikle yün veya keten. Başörtüleri yaygındı.", imagePlaceholder: "Orta Çağ Kadın Kostümü" },
+                        { type: "Erkek", description: "Tunikler, pantolonlar (hose) ve pelerinler.", imagePlaceholder: "Orta Çağ Erkek Kostümü" },
+                        { type: "Halk", description: "Basit, dayanıklı yün giysiler. Köylü yaşam tarzını yansıtır.", imagePlaceholder: "Orta Çağ Halk Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "Daha zengin kumaşlar (ipek, kadife), süslü işlemeler ve gösterişli şapkalar.", imagePlaceholder: "Orta Çağ Saray Kostümü" },
+                        { type: "Askeri", description: "Zırhlar (zincir zırh, levha zırh), miğferler ve kılıçlar.", imagePlaceholder: "Orta Çağ Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Romanesk ve Gotik mimari tarzları öne çıkar. Kaleler, katedraller ve surlarla çevrili şehirler inşa edilmiştir.", imagePrompt: "Realistic photo of Medieval architecture, featuring majestic Gothic cathedrals with flying buttresses, pointed arches, stained glass, or fortified castles with sturdy stone walls and turrets. The scene should convey the scale and craftsmanship of Middle Ages construction. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Romanesk ve Gotik mimari tarzları öne çıkar. Kaleler, katedraller ve surlarla çevrili şehirler inşa edilmiştir.", imagePlaceholder: "Orta Çağ Mimari" }
                     ]
                 },
                 "ronesans": {
@@ -381,14 +390,14 @@
                     description: "14. yüzyıldan 17. yüzyıla kadar süren, sanat, bilim, felsefe ve mimaride büyük bir canlanma dönemi.",
                     influencers: ["Leonardo da Vinci (Ressam, Mimar, Bilim Adamı)", "Michelangelo (Ressam, Heykeltıraş, Mimar)", "Raphael (Ressam)", "Donatello (Heykiltıraş)", "Filippo Brunelleschi (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Bol etekler, korsajlar, kabarık kollar ve gösterişli şapkalar. Kumaşlar daha zengin ve işlemeliydi.", imagePrompt: "Full-body image of a Renaissance woman wearing an elaborate gown with a fitted bodice, wide skirts, and often square necklines. Fabrics are rich, such as brocade, velvet, and silk, adorned with embroidery and jewels. She might wear a 'French hood' or other ornate headpiece. The setting is a lavish Renaissance palace interior or a formal garden, in the style of existing timeline images, with natural lighting and a sense of depth." },
-                        { type: "Erkek", description: "Dubleler, kabarık pantolonlar (breeches), pelerinler ve geniş yakalar.", imagePrompt: "Full-body image of a Renaissance man wearing a doublet, hose, and a cloak, often with puffed or slashed sleeves. Fabrics include velvet, silk, and wool, often richly embroidered. He might wear a flat cap or a small, feathered hat. The setting is a grand Renaissance study, a bustling city square, or a nobleman's courtyard, in the style of existing timeline images, with natural lighting and a sense of depth." },
-                        { type: "Halk", description: "Daha basit kumaşlar ve kesimlerle günlük giysiler.", imagePrompt: "Full-body image of a Renaissance commoner (peasant or merchant) wearing practical, sturdy clothing made of wool or linen. For women, simple dresses and aprons; for men, tunics, simple breeches, and sturdy shoes. The attire reflects their daily working life. The setting is a rural village, a bustling market, or a craftsman's workshop, in the style of existing timeline images, with natural lighting and a sense of depth." },
-                        { type: "Saray/Üst Sınıf", description: "Lüks kumaşlar (ipek, kadife), inciler, işlemeler ve süslü yakalar.", imagePrompt: "Full-body image of a Renaissance noble man and woman in opulent court attire. The woman wears a magnificent gown with intricate lacework, pearl embellishments, and possibly a farthingale. The man wears an elaborately embroidered doublet, slashed sleeves, and jeweled accessories. The setting is a grand palace ballroom or a royal garden with classical elements, in the style of existing timeline images, with natural lighting and a sense of depth." },
-                        { type: "Askeri", description: "Levha zırhlar, daha hafif ve hareketli tasarımlar. Tüfekler ve tabancalar ortaya çıkmaya başladı.", imagePrompt: "Full-body image of a Renaissance soldier or mercenary wearing partial plate armor (such as a breastplate or helmet) over padded fabric clothing. They might carry a pike, sword, or early firearm. The setting is a battle camp, a fortified city gate, or a military parade ground, reflecting the changing nature of warfare in the period, in the style of existing timeline images, with natural lighting and a sense of depth." }
+                        { type: "Kadın", description: "Bol etekler, korsajlar, kabarık kollar ve gösterişli şapkalar. Kumaşlar daha zengin ve işlemeliydi.", imagePlaceholder: "Rönesans Kadın Kostümü" },
+                        { type: "Erkek", description: "Dubleler, kabarık pantolonlar (breeches), pelerinler ve geniş yakalar.", imagePlaceholder: "Rönesans Erkek Kostümü" },
+                        { type: "Halk", description: "Daha basit kumaşlar ve kesimlerle günlük giysiler.", imagePlaceholder: "Rönesans Halk Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "Lüks kumaşlar (ipek, kadife), inciler, işlemeler ve süslü yakalar.", imagePlaceholder: "Rönesans Saray Kostümü" },
+                        { type: "Askeri", description: "Levha zırhlar, daha hafif ve hareketli tasarımlar. Tüfekler ve tabancalar ortaya çıkmaya başladı.", imagePlaceholder: "Rönesans Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Klasik antikitenin yeniden canlanması. Simetri, oran, sütunlar, kubbeler ve revaklar ön plana çıktı. Filippo Brunelleschi ve Andrea Palladio gibi mimarlar öne çıktı.", imagePrompt: "Majestic Renaissance architecture, featuring buildings with classical elements like columns, pilasters, and arches. Emphasize symmetry, proportion, and harmony. Examples include grand palaces with courtyards, elegant villas, or early domed churches. The scene should convey the artistic and intellectual rebirth of the period, in the style of existing timeline images, with natural lighting and a sense of depth." }
+                        { type: "Mimari Temelleri", description: "Klasik antikitenin yeniden canlanması. Simetri, oran, sütunlar, kubbeler ve revaklar ön plana çıktı. Filippo Brunelleschi ve Andrea Palladio gibi mimarlar öne çıktı.", imagePlaceholder: "Rönesans Mimari" }
                     ]
                 },
                 "barok": {
@@ -396,13 +405,13 @@
                     description: "17. yüzyılda Avrupa'da ortaya çıkan Barok sanat ve mimarisi, dramatik etki, ihtişam ve hareketlilikle karakterize edilir.",
                     influencers: ["Gian Lorenzo Bernini (Heykeltıraş, Mimar)", "Caravaggio (Ressam)", "Rembrandt (Ressam)", "Peter Paul Rubens (Ressam)"],
                     costumes: [
-                        { type: "Kadın", description: "Geniş etekler, gösterişli dekolteler, danteller ve kurdelelerle süslenmiş abartılı elbiseler.", imagePrompt: "Realistic photo of a Baroque era woman costume, featuring wide skirts, elaborate necklines, lace, and ribbons. The dress is opulent and dramatic. The setting is a grand palace interior or a formal garden. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Geniş kollar, dantelli yakalar, diz pantolonları (culottes) ve işlemeli ceketler. Uzun peruklar yaygındı.", imagePrompt: "Realistic photo of a Baroque era man costume, featuring wide sleeves, lace collars, breeches, and an embroidered jacket. A long, powdered wig is prominent. The setting is a grand palace interior or a formal garden. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Saray/Üst Sınıf", description: "İpek, kadife gibi zengin kumaşlar, altın ve gümüş işlemelerle dolu, gösterişli kıyafetler.", imagePrompt: "Realistic photo of a Baroque era aristocratic costume, made from rich fabrics like silk and satin, adorned with gold and silver embroidery, and elaborate jewels. The attire is extremely opulent and theatrical. The setting is a lavish court ballroom. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Daha süslü üniformalar, geniş şapkalar ve botlar. Zırhlar yavaş yavaş azalırken, kumaş giysiler öne çıktı.", imagePrompt: "Realistic photo of a Baroque era military uniform, featuring more ornate designs, wide hats, and boots. Fabric garments are more prominent than heavy armor. The setting is a military camp or a parade ground. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Geniş etekler, gösterişli dekolteler, danteller ve kurdelelerle süslenmiş abartılı elbiseler.", imagePlaceholder: "Barok Kadın Kostümü" },
+                        { type: "Erkek", description: "Geniş kollar, dantelli yakalar, diz pantolonları (culottes) ve işlemeli ceketler. Uzun peruklar yaygındı.", imagePlaceholder: "Barok Erkek Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "İpek, kadife gibi zengin kumaşlar, altın ve gümüş işlemelerle dolu, gösterişli kıyafetler.", imagePlaceholder: "Barok Saray Kostümü" },
+                        { type: "Askeri", description: "Daha süslü üniformalar, geniş şapkalar ve botlar. Zırhlar yavaş yavaş azalırken, kumaş giysiler öne çıktı.", imagePlaceholder: "Barok Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Kıvrımlı formlar, zengin süslemeler, büyük ölçekli yapılar ve dramatik ışık-gölge kullanımı. Roma'daki Aziz Petrus Bazilikası gibi yapılar örnek verilebilir.", imagePrompt: "Realistic photo of Baroque era architecture, featuring dramatic forms, rich ornamentation, large-scale structures, and dynamic light-and-shadow play. Examples include grand palaces or churches with elaborate facades. The scene should convey the opulence and grandeur of the period. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Kıvrımlı formlar, zengin süslemeler, büyük ölçekli yapılar ve dramatik ışık-gölge kullanımı. Roma'daki Aziz Petrus Bazilikası gibi yapılar örnek verilebilir.", imagePlaceholder: "Barok Mimari" }
                     ]
                 },
                 "rokoko": {
@@ -410,12 +419,12 @@
                     description: "Barok'un abartılı ihtişamından daha hafif, zarif ve eğlenceli bir tarza geçiş. Pastel renkler ve asimetrik süslemeler yaygındı.",
                     influencers: ["Antoine Watteau (Ressam)", "Jean-Honoré Fragonard (Ressam)", "François Boucher (Ressam)", "Balthasar Neumann (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Çok geniş etekler (panniers), narin danteller, kurdeleler, pastel renkler ve zarif nakışlar. Küçük, süslü şapkalar.", imagePrompt: "Realistic photo of a Rococo era woman costume, characterized by very wide pannier skirts, delicate lace, ribbons, pastel colors, and elegant embroidery. Small, ornate hats are common. The setting is a lavish salon or a refined garden party. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Daha dar kesim ceketler (justaucorps), işlemeli yelekler, diz pantolonları. Tozlu peruklar ve üç köşeli şapkalar.", imagePrompt: "Realistic photo of a Rococo era man costume, featuring narrower-cut coats (justaucorps), embroidered waistcoats, breeches, powdered wigs, and tricorn hats. The setting is a lavish salon or a refined garden party. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Saray/Üst Sınıf", description: "İpek ve saten gibi lüks kumaşlardan yapılmış, dantel ve kurdelelerle süslü, zarif ve göz alıcı kıyafetler.", imagePrompt: "Realistic photo of a Rococo era aristocratic costume, made from luxurious fabrics like silk and satin, adorned with lace and ribbons, elegant and eye-catching. The setting is a lavish salon or a refined garden party. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Çok geniş etekler (panniers), narin danteller, kurdeleler, pastel renkler ve zarif nakışlar. Küçük, süslü şapkalar.", imagePlaceholder: "Rokoko Kadın Kostümü" },
+                        { type: "Erkek", description: "Daha dar kesim ceketler (justaucorps), işlemeli yelekler, diz pantolonları. Tozlu peruklar ve üç köşeli şapkalar.", imagePlaceholder: "Rokoko Erkek Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "İpek ve saten gibi lüks kumaşlardan yapılmış, dantel ve kurdelelerle süslü, zarif ve göz alıcı kıyafetler.", imagePlaceholder: "Rokoko Saray Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "İç mekanlara odaklı, daha hafif ve süslü bir tarz. Pastel renkler, kıvrımlı hatlar, ayna ve yaldızlı süslemeler. Fransa'daki Petit Trianon örnek verilebilir.", imagePrompt: "Realistic photo of Rococo era architecture, focusing on lighter, more ornate, and playful interior designs. Emphasize pastel colors, curved lines, mirrors, and gilded decorations. Examples include elegant salons or small, intimate palaces. The scene should convey the refinement and charm of the period. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "İç mekanlara odaklı, daha hafif ve süslü bir tarz. Pastel renkler, kıvrımlı hatlar, ayna ve yaldızlı süslemeler. Fransa'daki Petit Trianon örnek verilebilir.", imagePlaceholder: "Rokoko Mimari" }
                     ]
                 },
                 "fransiz-ihtilali": {
@@ -423,13 +432,13 @@
                     description: "Sosyal ve siyasi değişimlerin giyimi de etkilediği, daha sade ve klasik tarzlara yönelişin olduğu dönem. Napoleon dönemi de kapsar.",
                     influencers: ["Jacques-Louis David (Ressam)", "Robert Adam (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Yüksek belli, dökümlü 'Empire' tarzı elbiseler, genellikle beyaz veya açık renklerde. Kumaşlar daha hafif.", imagePrompt: "Realistic photo of a French Revolution and Regency era woman costume, featuring high-waisted, flowing 'Empire' style dresses, typically in white or light colors. Fabrics are lighter. The setting is a classical garden or a refined interior. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Daha dar kesim pantolonlar, kuyruklu ceketler ve yelekler. Peruklar azalır, doğal saç modelleri popülerleşir.", imagePrompt: "Realistic photo of a French Revolution and Regency era man costume, featuring narrower-cut trousers, tailcoats, and waistcoats. Wigs are less common, and natural hairstyles are popular. The setting is a classical garden or a refined interior. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Devrimin etkisiyle daha sade ve işlevsel giysiler.", imagePrompt: "Realistic photo of a French Revolution era commoner costume, reflecting the influence of the revolution with simpler and more functional garments. The setting is a bustling street or a public square. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Napolyon Savaşları'nın etkisiyle daha standart ve resmi üniformalar.", imagePrompt: "Realistic photo of a Napoleonic Wars era military uniform, featuring more standardized and formal designs. The setting is a battlefield or a military parade. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Yüksek belli, dökümlü 'Empire' tarzı elbiseler, genellikle beyaz veya açık renklerde. Kumaşlar daha hafif.", imagePlaceholder: "Fransız İhtilali Kadın Kostümü" },
+                        { type: "Erkek", description: "Daha dar kesim pantolonlar, kuyruklu ceketler ve yelekler. Peruklar azalır, doğal saç modelleri popülerleşir.", imagePlaceholder: "Fransız İhtilali Erkek Kostümü" },
+                        { type: "Halk", description: "Devrimin etkisiyle daha sade ve işlevsel giysiler.", imagePlaceholder: "Fransız İhtilali Halk Kostümü" },
+                        { type: "Askeri", description: "Napolyon Savaşları'nın etkisiyle daha standart ve resmi üniformalar.", imagePlaceholder: "Fransız İhtilali Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Neoklasik mimarinin yükselişi. Antik Yunan ve Roma formlarına dönüş, simetri, oran ve sadelik ön plandaydı.", imagePrompt: "Realistic photo of Neoclassical architecture from the French Revolution and Regency era, showcasing a return to ancient Greek and Roman forms, emphasizing symmetry, proportion, and simplicity. Examples include public buildings with grand facades and classical columns. The scene should convey the order and rationality of the period. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Neoklasik mimarinin yükselişi. Antik Yunan ve Roma formlarına dönüş, simetri, oran ve sadelik ön plandaydı.", imagePlaceholder: "Fransız İhtilali Mimari" }
                     ]
                 },
                 "viktorya": {
@@ -437,14 +446,14 @@
                     description: "Kraliçe Victoria'nın hüküm sürdüğü dönem (1837-1901). Sanayi Devrimi, katı sosyal kurallar ve giyimde ihtişam ve zarafet.",
                     influencers: ["William Morris (Arts and Crafts Hareketi)", "John Ruskin (Sanat Eleştirmeni)", "Augustus Pugin (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Büyük kabarık etekler (krinolin, arkadan kabarık), korseyle daraltılmış beller, yüksek yakalar, danteller ve fırfırlar.", imagePrompt: "Realistic photo of a Victorian era woman costume, featuring large crinoline or bustle skirts, corseted waists, high collars, lace, and ruffles. The attire is grand and elegant. The setting is a Victorian street, a grand drawing-room, or a public park. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Kuyruklu ceketler, yelekler, kravatlar ve yüksek şapkalar (silindir şapka). Resmi ve şık giyim.", imagePrompt: "Realistic photo of a Victorian era man costume, featuring tailcoats, waistcoats, ties, and top hats. The attire is formal and stylish. The setting is a Victorian street, a gentleman's club, or a formal gathering. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Daha sade, pratik yün ve pamuklu giysiler. İş kıyafetleri ve günlük elbiseler.", imagePrompt: "Realistic photo of a Victorian era commoner costume, featuring simpler, practical wool and cotton garments. Work clothes and everyday dresses. The setting is a working-class street or a factory. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Saray/Üst Sınıf", description: "İpek, saten, kadife gibi pahalı kumaşlar, işlemeler ve mücevherlerle dolu abartılı kıyafetler. Gündüz ve gece giysileri ayrımı.", imagePrompt: "Realistic photo of a Victorian era aristocratic costume, made from expensive fabrics like silk, satin, and velvet, adorned with embroidery and jewels. Elaborate day and evening wear. The setting is a grand ballroom or a lavish drawing-room. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Çeşitli sömürge savaşları ve askeri genişlemelerle birlikte farklılaşan üniformalar.", imagePrompt: "Realistic photo of a Victorian era military uniform, reflecting various colonial wars and military expansions. The setting is a battlefield or a military parade. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Büyük kabarık etekler (krinolin, arkadan kabarık), korseyle daraltılmış beller, yüksek yakalar, danteller ve fırfırlar.", imagePlaceholder: "Viktorya Kadın Kostümü" },
+                        { type: "Erkek", description: "Kuyruklu ceketler, yelekler, kravatlar ve yüksek şapkalar (silindir şapka). Resmi ve şık giyim.", imagePlaceholder: "Viktorya Erkek Kostümü" },
+                        { type: "Halk", description: "Daha sade, pratik yün ve pamuklu giysiler. İş kıyafetleri ve günlük elbiseler.", imagePlaceholder: "Viktorya Halk Kostümü" },
+                        { type: "Saray/Üst Sınıf", description: "İpek, saten, kadife gibi pahalı kumaşlar, işlemeler ve mücevherlerle dolu abartılı kıyafetler. Gündüz ve gece giysileri ayrımı.", imagePlaceholder: "Viktorya Saray Kostümü" },
+                        { type: "Askeri", description: "Çeşitli sömürge savaşları ve askeri genişlemelerle birlikte farklılaşan üniformalar.", imagePlaceholder: "Viktorya Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Gotik Canlanma, Neoklasik, İtalyanlaştırma gibi eklektik tarzlar bir aradaydı. Büyük kamu binaları, kiliseler ve konutlar inşa edildi.", imagePrompt: "Realistic photo of Victorian era architecture, featuring eclectic styles like Gothic Revival, Neoclassical, and Italianate. Examples include grand public buildings, churches, and residential homes with ornate details and varied materials. The scene should convey the industrial and social changes of the period. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Gotik Canlanma, Neoklasik, İtalyanlaştırma gibi eklektik tarzlar bir aradaydı. Büyük kamu binaları, kiliseler ve konutlar inşa edildi.", imagePlaceholder: "Viktorya Mimari" }
                     ]
                 },
                 "art-nouveau": {
@@ -452,11 +461,11 @@
                     description: "19. yüzyılın sonu ve 20. yüzyılın başında ortaya çıkan, doğal formlar, kıvrımlı çizgiler ve sanatsal süslemelerle karakterize edilen sanat akımı.",
                     influencers: ["Gustav Klimt (Ressam)", "Alphonse Mucha (Grafik Sanatçısı)", "Antoni Gaudí (Mimar)", "Victor Horta (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "S-şekilli silüetler, dar beller, uzun, akıcı elbiseler. Doğal çiçek ve bitki motifleri işlemelerde yaygındı.", imagePrompt: "Realistic photo of an Art Nouveau / Belle Époque era woman costume, featuring S-shaped silhouettes, narrow waists, and long, flowing dresses. Natural floral and botanical motifs are common in embroidery. The setting is an elegant salon or a garden. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Daha rahat kesimli takım elbiseler, silindir şapkalar azalırken daha yumuşak şapkalar popülerleşti. Kumaşlar ve desenler daha çeşitliydi.", imagePrompt: "Realistic photo of an Art Nouveau / Belle Époque era man costume, featuring more relaxed-cut suits. Softer hats are popular, replacing top hats. Fabrics and patterns are more diverse. The setting is a stylish urban street or a cafe. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "S-şekilli silüetler, dar beller, uzun, akıcı elbiseler. Doğal çiçek ve bitki motifleri işlemelerde yaygındı.", imagePlaceholder: "Art Nouveau Kadın Kostümü" },
+                        { type: "Erkek", description: "Daha rahat kesimli takım elbiseler, silindir şapkalar azalırken daha yumuşak şapkalar popülerleşti. Kumaşlar ve desenler daha çeşitliydi.", imagePlaceholder: "Art Nouveau Erkek Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Binalarda demir, cam ve kiremit kullanımıyla organik, kıvrımlı hatlar ve dekoratif süslemeler. Victor Horta ve Antoni Gaudí'nin eserleri örnek verilebilir.", imagePrompt: "Realistic photo of Art Nouveau architecture, characterized by organic, curvilinear lines and decorative ornamentation, often incorporating iron, glass, and tiles. Examples include elegant townhouses or public buildings with intricate facades. The scene should convey the artistic and naturalistic themes of the period. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Binalarda demir, cam ve kiremit kullanımıyla organik, kıvrımlı hatlar ve dekoratif süslemeler. Victor Horta ve Antoni Gaudí'nin eserleri örnek verilebilir.", imagePlaceholder: "Art Nouveau Mimari" }
                     ]
                 },
                 "1920ler": {
@@ -464,14 +473,14 @@
                     description: "Birinci Dünya Savaşı sonrası refah ve sosyal değişimlerin yaşandığı, Caz müziği ve 'flapper' modasının yükseldiği dönem.",
                     influencers: ["Tamara de Lempicka (Ressam)", "William Van Alen (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Düşük belli, diz hizasında, püsküllü ve boncuklu 'flapper' elbiseleri. Cloche şapkalar.", imagePrompt: "Realistic photo of a 1920s Jazz Age woman costume, featuring low-waisted, knee-length 'flapper' dresses with fringes and beads, and cloche hats. The attire is loose and allows for dancing. The setting is a lively speakeasy or a dance hall. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Üç parçalı takım elbiseler, geniş yakalı gömlekler, fedora şapkalar ve yelekler. Gangster tarzı.", imagePrompt: "Realistic photo of a 1920s Jazz Age man costume, featuring three-piece suits, wide-collared shirts, fedora hats, and waistcoats. The style is often associated with 'gangster' fashion. The setting is a city street or a formal gathering. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Günlük kullanım için daha sade elbiseler ve iş kıyafetleri.", imagePrompt: "Realistic photo of a 1920s commoner costume, featuring simpler dresses and work clothes for daily use. The attire is practical and less ornate. The setting is a bustling market or a working-class neighborhood. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Dönemin önde gelen moda evlerinin tasarladığı, daha gösterişli elbiseler, kürkler, uzun inciler ve eldivenler.", imagePrompt: "Realistic photo of a 1920s Haute Couture costume, featuring elaborate dresses, furs, long pearls, and gloves, designed by leading fashion houses of the era. The attire is luxurious and fashionable. The setting is a grand party or a high-society event. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Savaş sonrası dönemde daha çok üniformalar ve sivil kıyafetlere geçiş.", imagePrompt: "Realistic photo of a 1920s military uniform, reflecting the post-war transition to more civilian clothing, but still showing military influence. The setting is a military base or a public ceremony. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Düşük belli, diz hizasında, püsküllü ve boncuklu 'flapper' elbiseleri. Cloche şapkalar.", imagePlaceholder: "1920ler Kadın Kostümü" },
+                        { type: "Erkek", description: "Üç parçalı takım elbiseler, geniş yakalı gömlekler, fedora şapkalar ve yelekler. Gangster tarzı.", imagePlaceholder: "1920ler Erkek Kostümü" },
+                        { type: "Halk", description: "Günlük kullanım için daha sade elbiseler ve iş kıyafetleri.", imagePlaceholder: "1920ler Halk Kostümü" },
+                        { type: "Haute Couture", description: "Dönemin önde gelen moda evlerinin tasarladığı, daha gösterişli elbiseler, kürkler, uzun inciler ve eldivenler.", imagePlaceholder: "1920ler Haute Couture" },
+                        { type: "Askeri", description: "Savaş sonrası dönemde daha çok üniformalar ve sivil kıyafetlere geçiş.", imagePlaceholder: "1920ler Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Art Deco mimarisi yükselişe geçti. Geometrik şekler, zengin süslemeler ve lüks malzemelerle karakterize edilir. New York'taki Chrysler Binası gibi örnekler.", imagePrompt: "Realistic photo of Art Deco architecture from the 1920s Jazz Age, featuring geometric shapes, rich ornamentation, and luxurious materials like chrome and glass. Examples include skyscrapers with stepped facades and decorative motifs. The scene should convey the modernity and glamour of the period. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Art Deco mimarisi yükselişe geçti. Geometrik şekler, zengin süslemeler ve lüks malzemelerle karakterize edilir. New York'taki Chrysler Binası gibi örnekler.", imagePlaceholder: "1920ler Mimari" }
                     ]
                 },
                 "1940lar": {
@@ -479,14 +488,14 @@
                     description: "II. Dünya Savaşı'nın etkisiyle giyimde pratiklik ve fonksiyonelliğin ön plana çıktığı, kumaş kısıtlamalarının olduğu dönem.",
                     influencers: ["Dönemin Anonim Tasarımcıları (Kısıtlamalar Altında)"],
                     costumes: [
-                        { type: "Kadın", description: "Omuzları vatkalı, dar kesim etek takımları, düz ayakkabılar. Saçlar topuz veya rulo şeklinde.", imagePrompt: "Realistic photo of a 1940s wartime woman costume, featuring padded-shoulder, slim-cut skirt suits, and flat shoes. Hair is often in a bun or rolls. The attire is practical and conservative due to rationing. The setting is a home front scene or a city street during wartime. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Sade, az kumaş kullanılan takım elbiseler. Üniformalar yaygındı.", imagePrompt: "Realistic photo of a 1940s wartime man costume, featuring simple, fabric-saving suits. Military uniforms are common. The setting is a city street or a public gathering during wartime. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Kumaş tasarrufu sağlayan, dayanıklı ve basit giysiler.", imagePrompt: "Realistic photo of a 1940s commoner costume, featuring durable and simple garments designed to save fabric. The attire is practical for daily life during wartime. The setting is a bustling market or a working-class neighborhood. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Dönemin moda kısıtlamalarına rağmen şıklığı koruyan, daha gösterişli kıyafetler. Lüks azalmış olsa da zarafet devam etti.", imagePrompt: "Realistic photo of a 1940s Haute Couture costume, featuring more elaborate clothing, though luxury was reduced due to the war. The attire is still refined but practical, reflecting the elegance maintained by leading designers despite rationing. The setting is a formal event or a high-society gathering. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Çeşitli orduların standart askeri üniformaları. İşlevsellik ön plandaydı.", imagePrompt: "Realistic photo of a 1940s military uniform, featuring standard military attire for various armies. Functionality is prioritized. The setting is a military base or a training ground. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Omuzları vatkalı, dar kesim etek takımları, düz ayakkabılar. Saçlar topuz veya rulo şeklinde.", imagePlaceholder: "1940lar Kadın Kostümü" },
+                        { type: "Erkek", description: "Sade, az kumaş kullanılan takım elbiseler. Üniformalar yaygındı.", imagePlaceholder: "1940lar Erkek Kostümü" },
+                        { type: "Halk", description: "Kumaş tasarrufu sağlayan, dayanıklı ve basit giysiler.", imagePlaceholder: "1940lar Halk Kostümü" },
+                        { type: "Haute Couture", description: "Dönemin moda kısıtlamalarına rağmen şıklığı koruyan, daha gösterişli kıyafetler. Lüks azalmış olsa da zarafet devam etti.", imagePlaceholder: "1940lar Haute Couture" },
+                        { type: "Askeri", description: "Çeşitli orduların standart askeri üniformaları. İşlevsellik ön plandaydı.", imagePlaceholder: "1940lar Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Savaş sonrası yeniden yapılanma dönemi. Daha çok fonksiyonel, basit ve seri üretime uygun yapılar. Art Deco'nun son etkileri ve modern mimarinin başlangıcı.", imagePrompt: "Realistic photo of 1940s architecture, reflecting post-war reconstruction with functional, simple, and mass-produced structures. Show early modern architectural styles. The scene should convey resilience and a focus on utility. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Savaş sonrası yeniden yapılanma dönemi. Daha çok fonksiyonel, basit ve seri üretime uygun yapılar. Art Deco'nun son etkileri ve modern mimarinin başlangıcı.", imagePlaceholder: "1940lar Mimari" }
                     ]
                 },
                 "1950ler": {
@@ -494,14 +503,14 @@
                     description: "Savaş sonrası ekonomik refahın arttığı, Rock'n Roll müziğinin yükselişe geçtiği, kadınlarda 'New Look'un popülerleştiği dönem.",
                     influencers: ["Christian Dior (Moda Tasarımcısı)", "Mies van der Rohe (Mimar)", "Le Corbusier (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Kabarık etekler, dar beller, dirsek boyu eldivenler. Christian Dior'un 'New Look'u.", imagePrompt: "Realistic photo of a 1950s Rock'n Roll era woman costume, featuring full skirts, cinched waists, and elbow-length gloves, reflecting Christian Dior's 'New Look'. The setting is a diner, a dance floor, or a suburban street. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Kravatlı, dar kesim takım elbiseler. Gençler arasında tişörtler ve jeanler popülerleşti.", imagePrompt: "Realistic photo of a 1950s Rock'n Roll era man costume, featuring slim-cut suits with ties. T-shirts and jeans became popular among youth. The setting is a diner, a drive-in, or a suburban street. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Ev hanımları için pratik elbiseler, işçiler için dayanıklı giysiler.", imagePrompt: "Realistic photo of a 1950s commoner costume, featuring practical dresses for housewives and durable work clothes for laborers. The attire reflects everyday life in the post-war boom. The setting is a suburban home or a local market. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Dönemin önde gelen moda evlerinin tasarımları, daha şık ve couture tasarımlar, lüks aksesuarlar.", imagePrompt: "Realistic photo of a 1950s Haute Couture costume, featuring stylish and couture designs by leading fashion houses, along with luxurious accessories. The attire is sophisticated and elegant. The setting is a high-society event or a grand hotel. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Kore Savaşı dönemi üniformaları ve soğuk savaş etkileri.", imagePrompt: "Realistic photo of a 1950s military uniform, reflecting the Korean War era and Cold War influences. The uniforms are functional and standardized. The setting is a military base or a training ground. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Kabarık etekler, dar beller, dirsek boyu eldivenler. Christian Dior'un 'New Look'u.", imagePlaceholder: "1950ler Kadın Kostümü" },
+                        { type: "Erkek", description: "Kravatlı, dar kesim takım elbiseler. Gençler arasında tişörtler ve jeanler popülerleşti.", imagePlaceholder: "1950ler Erkek Kostümü" },
+                        { type: "Halk", description: "Ev hanımları için pratik elbiseler, işçiler için dayanıklı giysiler.", imagePlaceholder: "1950ler Halk Kostümü" },
+                        { type: "Haute Couture", description: "Dönemin önde gelen moda evlerinin tasarımları, daha şık ve couture tasarımlar, lüks aksesuarlar.", imagePlaceholder: "1950ler Haute Couture" },
+                        { type: "Askeri", description: "Kore Savaşı dönemi üniformaları ve soğuk savaş etkileri.", imagePlaceholder: "1950ler Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Modern mimaride yalınlık ve fonksiyonellik ön plandaydı. suburban evler (banliyö evleri) ve otoyolların artışı. Mid-century modern tarzı.", imagePrompt: "Realistic photo of 1950s architecture, emphasizing simplicity and functionality in modern design. Examples include suburban homes with clean lines and large windows, or roadside diners. The scene should convey the optimism and growth of the post-war era. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Modern mimaride yalınlık ve fonksiyonellik ön plandaydı. suburban evler (banliyö evleri) ve otoyolların artışı. Mid-century modern tarzı.", imagePlaceholder: "1950ler Mimari" }
                     ]
                 },
                 "1970ler": {
@@ -509,14 +518,14 @@
                     description: "Bireyselliğin ve özgürlüğün ön plana çıktığı, disko, punk ve hippie akımlarının modayı etkilediği renkli ve çeşitli bir dönem.",
                     influencers: ["Andy Warhol (Pop Art Sanatçısı - etkisi devam eden)", "Robert Venturi (Postmodern Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Uzun etekler, İspanyol paça pantolonlar, tulumlar, disko kıyafetleri, çiçekli desenler.", imagePrompt: "Realistic photo of a 1970s woman costume, featuring long skirts, bell-bottom pants, jumpsuits, disco outfits, and floral patterns. The attire is expressive and diverse. The setting is a disco club, a music festival, or a casual outdoor scene. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "İspanyol paça pantolonlar, geniş yakalı gömlekler, bol kesim ceketler. Disko ve süet detaylar.", imagePrompt: "Realistic photo of a 1970s man costume, featuring bell-bottom pants, wide-collared shirts, and loose-fitting jackets. Disco and suede details are common. The setting is a disco club, a music festival, or a casual outdoor scene. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Daha rahat ve bol kesim günlük giysiler, jeanler ve tişörtler.", imagePrompt: "Realistic photo of a 1970s commoner costume, featuring more relaxed and loose-fitting everyday garments, jeans, and t-shirts. The attire reflects a more casual lifestyle. The setting is a city park or a local street. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Dönemin lüks moda evlerinden çıkan, daha lüks kumaşlardan yapılmış şık elbiseler ve takımlar, ancak dönemin rahatlığı hissedilirdi.", imagePrompt: "Realistic photo of a 1970s Haute Couture costume, featuring stylish dresses and suits made from more luxurious fabrics, yet still reflecting the relaxed feel of the era, designed by luxury fashion houses. The setting is a high-end restaurant or a private party. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Vietnam Savaşı sonrası döneme ait üniformalar, kamuflaj desenleri.", imagePrompt: "Realistic photo of a 1970s military uniform, reflecting the post-Vietnam War era, with common camouflage patterns. The uniforms are functional and adapted for modern warfare. The setting is a military base or a training ground. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Uzun etekler, İspanyol paça pantolonlar, tulumlar, disko kıyafetleri, çiçekli desenler.", imagePlaceholder: "1970ler Kadın Kostümü" },
+                        { type: "Erkek", description: "İspanyol paça pantolonlar, geniş yakalı gömlekler, bol kesim ceketler. Disko ve süet detaylar.", imagePlaceholder: "1970ler Erkek Kostümü" },
+                        { type: "Halk", description: "Daha rahat ve bol kesim günlük giysiler, jeanler ve tişörtler.", imagePlaceholder: "1970ler Halk Kostümü" },
+                        { type: "Haute Couture", description: "Dönemin lüks moda evlerinden çıkan, daha lüks kumaşlardan yapılmış şık elbiseler ve takımlar, ancak dönemin rahatlığı hissedilirdi.", imagePlaceholder: "1970ler Haute Couture" },
+                        { type: "Askeri", description: "Vietnam Savaşı sonrası döneme ait üniformalar, kamuflaj desenleri.", imagePlaceholder: "1970ler Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Brütalizm ve Postmodernizm'in yükselişi. Betonın kullanımı, karmaşık geometrik formlar ve eklektik stiller.", imagePrompt: "Realistic photo of 1970s architecture, showcasing Brutalism and early Postmodernism. Emphasize the use of raw concrete, complex geometric forms, and eclectic styles. The scene should convey a sense of bold experimentation. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Brütalizm ve Postmodernizm'in yükselişi. Betonın kullanımı, karmaşık geometrik formlar ve eklektik stiller.", imagePlaceholder: "1970ler Mimari" }
                     ]
                 },
                 "1980ler": {
@@ -524,14 +533,14 @@
                     description: "Büyük omuz vatkaları, neon renkler, spor giyim ve pop kültürünün moda üzerindeki güçlü etkisiyle bilinen bir dönem.",
                     influencers: ["Jean-Michel Basquiat (Ressam)", "Keith Haring (Ressam)", "Philip Johnson (Mimar)", "Michael Graves (Mimar)"],
                     costumes: [
-                        { type: "Kadın", description: "Büyük vatkalı ceketler ve bluzlar, taytlar, mini etekler, parlak renkler. Saçlar kabarık ve permalı.", imagePrompt: "Realistic photo of a 1980s woman costume, featuring large shoulder-padded jackets and blouses, leggings, mini-skirts, and bright neon colors. Hair is voluminous and permed. The setting is an urban street, a shopping mall, or a music video set. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Geniş omuzlu ceketler, takım elbiseler, jeanler, spor ayakkabılar. Pop yıldızlarının tarzları etkiliydi.", imagePrompt: "Realistic photo of a 1980s man costume, featuring wide-shouldered jackets, suits, jeans, and sneakers. Pop star styles are influential. The setting is an urban street, a video arcade, or a music concert. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Markalı spor giyim, jeanler, sweatshirtler günlük yaşamda popülerdi.", imagePrompt: "Realistic photo of a 1980s commoner costume, featuring branded sportswear, jeans, and sweatshirts popular in daily life. The attire is casual and reflects mainstream trends. The setting is a suburban street or a shopping mall. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Dönemin lüks moda evlerinden çıkan abartılı tasarımlar, lüks markalar, power dressing (güçlü kadın imajı).", imagePrompt: "Realistic photo of a 1980s Haute Couture costume, featuring exaggerated designs, luxury brands, and 'power dressing' (a strong female image) from leading fashion houses. The attire is bold and status-oriented. The setting is a high-end office or a glamorous party. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Soğuk Savaş dönemi üniformaları, daha modern teçhizat ve kamuflaj desenleri.", imagePrompt: "Realistic photo of a 1980s military uniform, reflecting the Cold War era, with more modern equipment and camouflage patterns. The uniforms are functional and designed for contemporary warfare. The setting is a military base or a training ground. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Büyük vatkalı ceketler ve bluzlar, taytlar, mini etekler, parlak renkler. Saçlar kabarık ve permalı.", imagePlaceholder: "1980ler Kadın Kostümü" },
+                        { type: "Erkek", description: "Geniş omuzlu ceketler, takım elbiseler, jeanler, spor ayakkabılar. Pop yıldızlarının tarzları etkiliydi.", imagePlaceholder: "1980ler Erkek Kostümü" },
+                        { type: "Halk", description: "Markalı spor giyim, jeanler, sweatshirtler günlük yaşamda popülerdi.", imagePlaceholder: "1980ler Halk Kostümü" },
+                        { type: "Haute Couture", description: "Dönemin lüks moda evlerinden çıkan abartılı tasarımlar, lüks markalar, power dressing (güçlü kadın imajı).", imagePlaceholder: "1980ler Haute Couture" },
+                        { type: "Askeri", description: "Soğuk Savaş dönemi üniformaları, daha modern teçhizat ve kamuflaj desenleri.", imagePlaceholder: "1980ler Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Postmodern mimarinin gelişimi. Historik referanslar, renkli cepheler, süslemeler ve bazen ironik öğelerle karakterize edilir.", imagePrompt: "Realistic photo of 1980s Postmodern architecture, featuring historical references, colorful facades, ornamentation, and sometimes ironic elements. Examples include buildings with playful or symbolic designs. The scene should convey a sense of cultural shift and individuality. Natural lighting, a sense of depth, with structures that blend seamlessly with the environment." }
+                        { type: "Mimari Temelleri", description: "Postmodern mimarinin gelişimi. Historik referanslar, renkli cepheler, süslemeler ve bazen ironik öğelerle karakterize edilir.", imagePlaceholder: "1980ler Mimari" }
                     ]
                 },
                 "gunumuz": {
@@ -539,14 +548,14 @@
                     description: "Küresel modanın etkisiyle çeşitliliğin arttığı, sürdürülebilrliğin ve kişisel tarzın önem kazandığı modern dönem.",
                     influencers: ["Zaha Hadid (Mimar - etkisi devam eden)", "Frank Gehry (Mimar - etkisi devam eden)", "Çağdaş Moda Tasarımcıları"],
                     costumes: [
-                        { type: "Kadın", description: "Her türlü stilin bir arada görüldüğü, spor giyimden minimalist parçalara kadar geniş yelpaze.", imagePrompt: "Realistic photo of a contemporary woman costume, showcasing a wide range of styles from sportswear to minimalist pieces, emphasizing sustainability and personal expression. The setting is a modern city street, a cafe, or a public space. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Smart casual, streetwear, klasik takım elbiseler ve teknolojik kumaşların kullanımı.", imagePrompt: "Realistic photo of a contemporary man costume, featuring smart casual, streetwear, classic suits, and the use of technological fabrics. The attire is versatile and reflects modern trends. The setting is a modern city street, an office, or a social gathering. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Rahat, fonksiyonel, markalı veya markasız giysiler, spor ayakkabılar.", imagePrompt: "Realistic photo of a contemporary commoner costume, featuring comfortable, functional, branded or unbranded garments, and sneakers. The attire is practical for daily life. The setting is a city park or a local street. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Lüks markaların ve haute couture'ün öne çıktığı, kişiye özel tasarımlar ve sosyal etkinliklere uygun şık kıyafetler.", imagePrompt: "Realistic photo of a contemporary Haute Couture costume, featuring luxury brands, haute couture designs, custom creations, and elegant outfits suitable for social events. The attire is sophisticated and high-fashion. The setting is a red carpet event or a high-end gallery. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Teknolojik, ergonomik ve gelişmiş kamuflaj özelliklerine sahip modern askeri üniformalar.", imagePrompt: "Realistic photo of a contemporary military uniform, featuring technological, ergonomic, and advanced camouflage properties. The uniforms are designed for modern combat. The setting is a military base or a training ground. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." }
+                        { type: "Kadın", description: "Her türlü stilin bir arada görüldüğü, spor giyimden minimalist parçalara kadar geniş yelpaze.", imagePlaceholder: "Günümüz Kadın Kostümü" },
+                        { type: "Erkek", description: "Smart casual, streetwear, klasik takım elbiseler ve teknolojik kumaşların kullanımı.", imagePlaceholder: "Günümüz Erkek Kostümü" },
+                        { type: "Halk", description: "Rahat, fonksiyonel, markalı veya markasız giysiler, spor ayakkabılar.", imagePlaceholder: "Günümüz Halk Kostümü" },
+                        { type: "Haute Couture", description: "Lüks markaların ve haute couture'ün öne çıktığı, kişiye özel tasarımlar ve sosyal etkinliklere uygun şık kıyafetler.", imagePlaceholder: "Günümüz Haute Couture" },
+                        { type: "Askeri", description: "Teknolojik, ergonomik ve gelişmiş kamuflaj özelliklerine sahip modern askeri üniformalar.", imagePlaceholder: "Günümüz Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Sıfır atık binalar, dikey çiftlikler, akıllı şehir altyapıları, modüler ve 3D baskılı yapılar. Doğa ile entegre tasarımlar.", imagePrompt: "Realistic photo of contemporary architecture, featuring zero-waste buildings, vertical farms, smart city infrastructure, modular and 3D-printed structures, and designs integrated with nature. The image should convey innovation and sustainability, with natural lighting and a sense of depth." }
+                        { type: "Mimari Temelleri", description: "Sıfır atık binalar, dikey çiftlikler, akıllı şehir altyapıları, modüler ve 3D baskılı yapılar. Doğa ile entegre tasarımlar.", imagePlaceholder: "Günümüz Mimari" }
                     ]
                 },
                 "yakin-gelecek": {
@@ -554,14 +563,14 @@
                     description: "Teknolojinin modayı ve yaşam alanlarını daha da entegre edeceği, sürdürülebilir malzemelerin ve akıllı teknolojilerin öne çıkacağı bir gelecek vizyonu.",
                     influencers: ["Yapay Zeka Destekli Tasarımcılar", "Sürdürülebilirlik Uzmanları"],
                     costumes: [
-                        { type: "Kadın", description: "Akıllı kumaşlar, değişen renk ve formlar, minimalist ve fonksiyonel tasarımlar. Giyilebilir teknoloji.", imagePrompt: "Realistic photo of a near-future woman costume, featuring smart fabrics, changing colors and forms, minimalist and functional designs, and integrated wearable technology. The attire is eco-friendly, recyclable, unisex, and multi-purpose. The setting is a futuristic city, a high-tech interior, or a natural landscape with advanced elements. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Erkek", description: "Uyarlanabilir giysiler, vücut ısısını düzenleyen kumaşlar, entegre arayüzler ve kişiselleştirilebilir tasarımlar.", imagePrompt: "Realistic photo of a near-future man costume, featuring adaptive garments, body-temperature regulating fabrics, integrated interfaces, and customizable designs. The attire is eco-friendly, recyclable, unisex, and multi-purpose. The setting is a futuristic city, a high-tech interior, or a natural landscape with advanced elements. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Halk", description: "Çevre dostu, geri dönüştürülebilir malzemelerden yapılmış, unisex ve çok amaçlı giysiler.", imagePrompt: "Realistic photo of near-future commoner costume, featuring eco-friendly, recyclable materials, unisex designs, and multi-purpose garments. The attire is practical and comfortable. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Haute Couture", description: "Bireyselliği ve statüyü vurgulayan, özel üretim, belki de holografik veya dinamik tasarımlar. Lüks ve yenilikçi malzemeler.", imagePrompt: "Realistic photo of near-future Haute Couture costume, emphasizing individuality and status through bespoke, possibly holographic or dynamically changing designs. Luxurious and innovative materials. Natural lighting, a sense of depth, with figures that blend seamlessly with the environment." },
-                        { type: "Askeri", description: "Yüksek teknoloji entegrasyonuna sahip, hafif, koruyucu ve adaptif askeri üniformalar. Kamuflajda dijitalleşme.", imagePrompt: "High-tech integrated, lightweight, protective, and adaptive military uniforms. Digitalization in camouflage." }
+                        { type: "Kadın", description: "Akıllı kumaşlar, değişen renk ve formlar, minimalist ve fonksiyonel tasarımlar. Giyilebilir teknoloji.", imagePlaceholder: "Yakın Gelecek Kadın Kostümü" },
+                        { type: "Erkek", description: "Uyarlanabilir giysiler, vücut ısısını düzenleyen kumaşlar, entegre arayüzler ve kişiselleştirilebilir tasarımlar.", imagePlaceholder: "Yakın Gelecek Erkek Kostümü" },
+                        { type: "Halk", description: "Çevre dostu, geri dönüştürülebilir malzemelerden yapılmış, unisex ve çok amaçlı giysiler.", imagePlaceholder: "Yakın Gelecek Halk Kostümü" },
+                        { type: "Haute Couture", description: "Bireyselliği ve statüyü vurgulayan, özel üretim, belki de holografik veya dinamik tasarımlar. Lüks ve yenilikçi malzemeler.", imagePlaceholder: "Yakın Gelecek Haute Couture" },
+                        { type: "Askeri", description: "Yüksek teknoloji entegrasyonuna sahip, hafif, koruyucu ve adaptif askeri üniformalar. Kamuflajda dijitalleşme.", imagePlaceholder: "Yakın Gelecek Askeri Kostümü" }
                     ],
                     architecture: [
-                        { type: "Mimari Temelleri", description: "Sıfır atık binalar, dikey çiftlikler, akıllı şehir altyapıları, modüler ve 3D baskılı yapılar. Doğa ile entegre tasarımlar.", imagePrompt: "Realistic photo of near-future architecture, featuring zero-waste buildings, vertical farms, smart city infrastructure, modular and 3D-printed structures, and designs integrated with nature. The image should convey innovation and sustainability, with natural lighting and a sense of depth." }
+                        { type: "Mimari Temelleri", description: "Sıfır atık binalar, dikey çiftlikler, akıllı şehir altyapıları, modüler ve 3D baskılı yapılar. Doğa ile entegre tasarımlar.", imagePlaceholder: "Yakın Gelecek Mimari" }
                     ]
                 }
             };
@@ -591,19 +600,8 @@
                             imgElement.alt = `${costume.type} Kostümü`;
                             imgElement.classList.add('rounded-md');
                             
-                            // Image loading indicator for costume
-                            const imageLoadingIndicator = document.createElement('div');
-                            imageLoadingIndicator.classList.add('image-loading-indicator');
-                            imageLoadingIndicator.textContent = 'Görsel Yükleniyor...';
-                            costumeDiv.appendChild(imageLoadingIndicator); // Append early
-
-                            // Resim yüklenemezse, geçici bir yer tutucu resim göster
-                            imgElement.onerror = function() {
-                                this.onerror = null; // Sonsuz döngüye girmemesi için hata işleyiciyi kaldır
-                                this.src = 'https://placehold.co/400x300/e0e0e0/333333?text=Resim+Yok';
-                            };
-                            // Başlangıçta resmi oluştur
-                            generateAndSetImage(imgElement, imageLoadingIndicator, costume.imagePrompt);
+                            // Başlangıçta yer tutucu resmi ayarla
+                            imgElement.src = `https://placehold.co/400x300/f0f0f0/333333?text=${encodeURIComponent(costume.imagePlaceholder)}`;
                             
                             // Tıklama animasyonu için olay dinleyici
                             imgElement.addEventListener('click', (event) => {
@@ -625,6 +623,12 @@
                             descriptionElement.textContent = costume.description;
                             costumeDiv.appendChild(descriptionElement);
 
+                            // API Hata Mesajı Alanı
+                            const apiErrorMessage = document.createElement('div');
+                            apiErrorMessage.classList.add('error-message');
+                            apiErrorMessage.textContent = 'API anahtarı eksik veya geçersiz. Lütfen kodunuzdaki apiKey değişkenine kendi Gemini API anahtarınızı ekleyin.';
+                            costumeDiv.appendChild(apiErrorMessage);
+
                             // Gemini API özelliği için buton ve metin alanı (İçgörü Üret)
                             const generateInsightButton = document.createElement('button');
                             generateInsightButton.classList.add('mt-4', 'bg-gray-700', 'hover:bg-gray-900', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-full', 'transition-colors', 'duration-300', 'w-full');
@@ -636,10 +640,10 @@
                             costumeDiv.appendChild(insightDisplay);
 
                             // Loading indicator for insight
-                            const loadingInsightIndicator = document.createElement('div'); // Yeni değişken adı
+                            const loadingInsightIndicator = document.createElement('div');
                             loadingInsightIndicator.classList.add('loading-indicator');
                             loadingInsightIndicator.textContent = 'Yükleniyor...';
-                            costumeDiv.appendChild(loadingInsightIndicator); // Append early
+                            costumeDiv.appendChild(loadingInsightIndicator);
 
                             // Modern Adaptasyon Fikri Üret butonu
                             const generateAdaptationButton = document.createElement('button');
@@ -651,11 +655,10 @@
                             adaptationDisplay.classList.add('adaptation-text');
                             costumeDiv.appendChild(adaptationDisplay);
 
-                            const loadingAdaptationIndicator = document.createElement('div'); // Yeni değişken adı
+                            const loadingAdaptationIndicator = document.createElement('div');
                             loadingAdaptationIndicator.classList.add('loading-indicator');
                             loadingAdaptationIndicator.textContent = 'Yükleniyor...';
                             costumeDiv.appendChild(loadingAdaptationIndicator);
-
 
                             // Image generation button for all costumes
                             const generateImageButton = document.createElement('button');
@@ -663,14 +666,32 @@
                             generateImageButton.innerHTML = 'Görsel Üret 🖼️';
                             costumeDiv.appendChild(generateImageButton);
 
+                            const imageLoadingIndicator = document.createElement('div');
+                            imageLoadingIndicator.classList.add('image-loading-indicator');
+                            imageLoadingIndicator.textContent = 'Görsel Yükleniyor...';
+                            costumeDiv.appendChild(imageLoadingIndicator);
+
+
                             generateImageButton.addEventListener('click', async () => {
+                                apiErrorMessage.style.display = 'none'; // Hata mesajını gizle
                                 imageLoadingIndicator.style.display = 'block';
-                                imgElement.src = 'https://placehold.co/400x300/e0e0e0/333333?text=Yükleniyor...'; // Geçici yüklenme görseli
+                                imgElement.src = `https://placehold.co/400x300/e0e0e0/333333?text=Yükleniyor...`; // Geçici yüklenme görseli
 
                                 const imagePrompt = costume.imagePrompt; // Dinamik prompt kullanımı
                                 
+                                // BURAYA KENDİ GEMINI API ANAHTARINIZI YAPIŞTIRIN (1. YER)
+                                // Bir Google Cloud projesi oluşturup Gemini API'yi etkinleştirerek anahtar alabilirsiniz.
+                                // https://aistudio.google.com/app/apikey adresinden de alabilirsiniz.
+                                const apiKey = "AIzaSyDJ-2CwiuwJOSI8SoECbRBxjG830Rsrcm0"; // <-- BU SATIRI GÜNCELLEYİN!
+
+                                if (!apiKey || apiKey === "YOUR_API_KEY_HERE_1") {
+                                    apiErrorMessage.style.display = 'block';
+                                    imageLoadingIndicator.style.display = 'none';
+                                    imgElement.src = `https://placehold.co/400x300/e0e0e0/333333?text=API+Anahtarı+Yok`;
+                                    return;
+                                }
+
                                 const payload = { instances: { prompt: imagePrompt }, parameters: { "sampleCount": 1} };
-                                const apiKey = ""; // Canvas ortamı otomatik olarak API anahtarını sağlayacaktır.
                                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
                                 try {
@@ -679,16 +700,28 @@
                                         headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify(payload)
                                     });
+
+                                    if (!response.ok) {
+                                        const errorText = await response.text();
+                                        console.error(`[ERROR] API HTTP Hatası: ${response.status} ${response.statusText} - ${errorText}`);
+                                        apiErrorMessage.textContent = `Görsel API Hatası: ${response.status} - ${errorText.substring(0, 100)}...`;
+                                        apiErrorMessage.style.display = 'block';
+                                        imgElement.src = `https://placehold.co/400x300/e0e0e0/333333?text=Hata+Oluştu`;
+                                        return;
+                                    }
+
                                     const result = await response.json();
                                     if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
                                         const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                                         imgElement.src = imageUrl;
                                     } else {
-                                        imgElement.src = 'https://placehold.co/400x300/e0e0e0/333333?text=Görsel+Üretilemedi';
+                                        imgElement.src = `https://placehold.co/400x300/e0e0e0/333333?text=Görsel+Üretilemedi`;
                                     }
                                 } catch (error) {
-                                    console.error('Görsel API çağrısı hatası:', error);
-                                    imgElement.src = 'https://placehold.co/400x300/e0e0e0/333333?text=Hata+Oluştu';
+                                    console.error('Görsel API çağrısı sırasında bir hata oluştu:', error);
+                                    apiErrorMessage.textContent = `Görsel API çağrısı sırasında bir hata oluştu: ${error.message}`;
+                                    apiErrorMessage.style.display = 'block';
+                                    imgElement.src = `https://placehold.co/400x300/e0e0e0/333333?text=Hata+Oluştu`;
                                 } finally {
                                     imageLoadingIndicator.style.display = 'none';
                                 }
@@ -696,6 +729,7 @@
 
 
                             generateInsightButton.addEventListener('click', async () => {
+                                apiErrorMessage.style.display = 'none'; // Hata mesajını gizle
                                 loadingInsightIndicator.style.display = 'block';
                                 insightDisplay.style.display = 'none'; // Önceki içgörüyü gizle
                                 insightDisplay.textContent = ''; // Metni temizle
@@ -714,7 +748,18 @@
                                 let chatHistory = [];
                                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                                 const payload = { contents: chatHistory };
-                                const apiKey = ""; // Canvas ortamı otomatik olarak API anahtarını sağlayacaktır.
+                                // BURAYA KENDİ GEMINI API ANAHTARINIZI YAPIŞTIRIN (2. YER)
+                                // Bir Google Cloud projesi oluşturup Gemini API'yi etkinleştirerek anahtar alabilirsiniz.
+                                // https://aistudio.google.com/app/apikey adresinden de alabilirsiniz.
+                                const apiKey = "AIzaSyDJ-2CwiuwJOSI8SoECbRBxjG830Rsrcm0"; // <-- BU SATIRI GÜNCELLEYİN!
+
+                                if (!apiKey || apiKey === "YOUR_API_KEY_HERE_2") {
+                                    apiErrorMessage.style.display = 'block';
+                                    loadingInsightIndicator.style.display = 'none';
+                                    insightDisplay.textContent = '';
+                                    return;
+                                }
+
                                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                                 try {
@@ -723,6 +768,14 @@
                                         headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify(payload)
                                     });
+
+                                    if (!response.ok) {
+                                        const errorText = await response.text();
+                                        apiErrorMessage.textContent = `İçgörü API Hatası: ${response.status} - ${errorText.substring(0, 100)}...`;
+                                        apiErrorMessage.style.display = 'block';
+                                        return;
+                                    }
+
                                     const result = await response.json();
                                     if (result.candidates && result.candidates.length > 0 &&
                                         result.candidates[0].content && result.candidates[0].content.parts &&
@@ -736,14 +789,15 @@
                                     }
                                 } catch (error) {
                                     console.error('API çağrısı hatası:', error);
-                                    insightDisplay.textContent = 'Bir hata oluştu, lütfen tekrar deneyin.';
-                                    insightDisplay.style.display = 'block';
+                                    apiErrorMessage.textContent = `İçgörü API çağrısı sırasında bir hata oluştu: ${error.message}`;
+                                    apiErrorMessage.style.display = 'block';
                                 } finally {
                                     loadingInsightIndicator.style.display = 'none';
                                 }
                             });
 
                             generateAdaptationButton.addEventListener('click', async () => {
+                                apiErrorMessage.style.display = 'none'; // Hata mesajını gizle
                                 loadingAdaptationIndicator.style.display = 'block';
                                 adaptationDisplay.style.display = 'none';
                                 adaptationDisplay.textContent = '';
@@ -753,7 +807,18 @@
                                 let chatHistory = [];
                                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                                 const payload = { contents: chatHistory };
-                                const apiKey = ""; 
+                                // BURAYA KENDİ GEMINI API ANAHTARINIZI YAPIŞTIRIN (3. YER)
+                                // Bir Google Cloud projesi oluşturup Gemini API'yi etkinleştirerek anahtar alabilirsiniz.
+                                // https://aistudio.google.com/app/apikey adresinden de alabilirsiniz.
+                                const apiKey = "AIzaSyDJ-2CwiuwJOSI8SoECbRBxjG830Rsrcm0"; // <-- BU SATIRI GÜNCELLEYİN!
+
+                                if (!apiKey || apiKey === "YOUR_API_KEY_HERE_3") {
+                                    apiErrorMessage.style.display = 'block';
+                                    loadingAdaptationIndicator.style.display = 'none';
+                                    adaptationDisplay.textContent = '';
+                                    return;
+                                }
+
                                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                                 try {
@@ -762,6 +827,14 @@
                                         headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify(payload)
                                     });
+
+                                    if (!response.ok) {
+                                        const errorText = await response.text();
+                                        apiErrorMessage.textContent = `Adaptasyon API Hatası: ${response.status} - ${errorText.substring(0, 100)}...`;
+                                        apiErrorMessage.style.display = 'block';
+                                        return;
+                                    }
+
                                     const result = await response.json();
                                     if (result.candidates && result.candidates.length > 0 &&
                                         result.candidates[0].content && result.candidates[0].content.parts &&
@@ -775,8 +848,8 @@
                                     }
                                 } catch (error) {
                                     console.error('Modern adaptasyon API çağrısı hatası:', error);
-                                    adaptationDisplay.textContent = 'Bir hata oluştu, lütfen tekrar deneyin.';
-                                    adaptationDisplay.style.display = 'block';
+                                    apiErrorMessage.textContent = `Modern adaptasyon API çağrısı sırasında bir hata oluştu: ${error.message}`;
+                                    apiErrorMessage.style.display = 'block';
                                 } finally {
                                     loadingAdaptationIndicator.style.display = 'none';
                                 }
@@ -798,19 +871,8 @@
                             imgElement.alt = arch.type;
                             imgElement.classList.add('rounded-md');
                             
-                            // Image loading indicator for architecture
-                            const imageLoadingIndicator = document.createElement('div');
-                            imageLoadingIndicator.classList.add('image-loading-indicator');
-                            imageLoadingIndicator.textContent = 'Görsel Yükleniyor...';
-                            archDiv.appendChild(imageLoadingIndicator); // Append early
-
-                            // Resim yüklenemezse, geçici bir yer tutucu resim göster
-                            imgElement.onerror = function() {
-                                this.onerror = null; // Sonsuz döngüye girmemesi için hata işleyiciyi kaldır
-                                this.src = 'https://placehold.co/600x400/e0e0e0/333333?text=Resim+Yok';
-                            };
-                            // Başlangıçta resmi oluştur
-                            generateAndSetImage(imgElement, imageLoadingIndicator, arch.imagePrompt, true);
+                            // Başlangıçta yer tutucu resmi ayarla
+                            imgElement.src = `https://placehold.co/600x400/f0f0f0/333333?text=${encodeURIComponent(arch.imagePlaceholder)}`;
                             
                             // Tıklama animasyonu için olay dinleyici
                             imgElement.addEventListener('click', (event) => {
@@ -832,6 +894,12 @@
                             descriptionElement.textContent = arch.description;
                             archDiv.appendChild(descriptionElement);
 
+                            // API Hata Mesajı Alanı
+                            const apiErrorMessage = document.createElement('div');
+                            apiErrorMessage.classList.add('error-message');
+                            apiErrorMessage.textContent = 'API anahtarı eksik veya geçersiz. Lütfen kodunuzdaki apiKey değişkenine kendi Gemini API anahtarınızı ekleyin.';
+                            archDiv.appendChild(apiErrorMessage);
+
                             // Gemini API özelliği için buton ve metin alanı (İçgörü Üret)
                             const generateInsightButton = document.createElement('button');
                             generateInsightButton.classList.add('mt-4', 'bg-gray-700', 'hover:bg-gray-900', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-full', 'transition-colors', 'duration-300', 'w-full');
@@ -840,14 +908,12 @@
 
                             const insightDisplay = document.createElement('div');
                             insightDisplay.classList.add('insight-text');
-                            // insightDisplay'i archDiv'e ekle
                             archDiv.appendChild(insightDisplay);
 
                             // Loading indicator for insight
-                            const loadingInsightIndicator = document.createElement('div'); // Yeni değişken adı
+                            const loadingInsightIndicator = document.createElement('div');
                             loadingInsightIndicator.classList.add('loading-indicator');
                             loadingInsightIndicator.textContent = 'Yükleniyor...';
-                            // loadingInsightIndicator'ı archDiv'e ekle
                             archDiv.appendChild(loadingInsightIndicator);
 
                             // Modern Adaptasyon Fikri Üret butonu
@@ -860,11 +926,10 @@
                             adaptationDisplay.classList.add('adaptation-text');
                             archDiv.appendChild(adaptationDisplay);
 
-                            const loadingAdaptationIndicator = document.createElement('div'); // Yeni değişken adı
+                            const loadingAdaptationIndicator = document.createElement('div');
                             loadingAdaptationIndicator.classList.add('loading-indicator');
                             loadingAdaptationIndicator.textContent = 'Yükleniyor...';
                             archDiv.appendChild(loadingAdaptationIndicator);
-
 
                             // Image generation button for all architecture
                             const generateImageButton = document.createElement('button');
@@ -872,14 +937,32 @@
                             generateImageButton.innerHTML = 'Görsel Üret 🖼️';
                             archDiv.appendChild(generateImageButton);
 
+                            const imageLoadingIndicator = document.createElement('div');
+                            imageLoadingIndicator.classList.add('image-loading-indicator');
+                            imageLoadingIndicator.textContent = 'Görsel Yükleniyor...';
+                            archDiv.appendChild(imageLoadingIndicator);
+
+
                             generateImageButton.addEventListener('click', async () => {
+                                apiErrorMessage.style.display = 'none'; // Hata mesajını gizle
                                 imageLoadingIndicator.style.display = 'block';
-                                imgElement.src = 'https://placehold.co/600x400/e0e0e0/333333?text=Yükleniyor...'; // Geçici yüklenme görseli
+                                imgElement.src = `https://placehold.co/600x400/e0e0e0/333333?text=Yükleniyor...`; // Geçici yüklenme görseli
 
                                 const imagePrompt = arch.imagePrompt; // Dinamik prompt kullanımı
                                 
+                                // BURAYA KENDİ GEMINI API ANAHTARINIZI YAPIŞTIRIN (4. YER)
+                                // Bir Google Cloud projesi oluşturup Gemini API'yi etkinleştirerek anahtar alabilirsiniz.
+                                // https://aistudio.google.com/app/apikey adresinden de alabilirsiniz.
+                                const apiKey = "AIzaSyDJ-2CwiuwJOSI8SoECbRBxjG830Rsrcm0"; // <-- BU SATIRI GÜNCELLEYİN!
+
+                                if (!apiKey || apiKey === "YOUR_API_KEY_HERE_4") {
+                                    apiErrorMessage.style.display = 'block';
+                                    imageLoadingIndicator.style.display = 'none';
+                                    imgElement.src = `https://placehold.co/600x400/e0e0e0/333333?text=API+Anahtarı+Yok`;
+                                    return;
+                                }
+
                                 const payload = { instances: { prompt: imagePrompt }, parameters: { "sampleCount": 1} };
-                                const apiKey = ""; // Canvas ortamı otomatik olarak API anahtarını sağlayacaktır.
                                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
                                 try {
@@ -888,22 +971,35 @@
                                         headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify(payload)
                                     });
+
+                                    if (!response.ok) {
+                                        const errorText = await response.text();
+                                        console.error(`[ERROR] API HTTP Hatası: ${response.status} ${response.statusText} - ${errorText}`);
+                                        apiErrorMessage.textContent = `Görsel API Hatası: ${response.status} - ${errorText.substring(0, 100)}...`;
+                                        apiErrorMessage.style.display = 'block';
+                                        imgElement.src = `https://placehold.co/600x400/e0e0e0/333333?text=Hata+Oluştu`;
+                                        return;
+                                    }
+
                                     const result = await response.json();
                                     if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
                                         const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                                         imgElement.src = imageUrl;
                                     } else {
-                                        imgElement.src = 'https://placehold.co/600x400/e0e0e0/333333?text=Görsel+Üretilemedi';
+                                        imgElement.src = `https://placehold.co/600x400/e0e0e0/333333?text=Görsel+Üretilemedi`;
                                     }
                                 } catch (error) {
-                                    console.error('Görsel API çağrısı hatası:', error);
-                                    imgElement.src = 'https://placehold.co/600x400/e0e0e0/333333?text=Hata+Oluştu';
+                                    console.error('Görsel API çağrısı sırasında bir hata oluştu:', error);
+                                    apiErrorMessage.textContent = `Görsel API çağrısı sırasında bir hata oluştu: ${error.message}`;
+                                    apiErrorMessage.style.display = 'block';
+                                    imgElement.src = `https://placehold.co/600x400/e0e0e0/333333?text=Hata+Oluştu`;
                                 } finally {
                                     imageLoadingIndicator.style.display = 'none';
                                 }
                             });
 
                             generateInsightButton.addEventListener('click', async () => {
+                                apiErrorMessage.style.display = 'none'; // Hata mesajını gizle
                                 loadingInsightIndicator.style.display = 'block';
                                 insightDisplay.style.display = 'none'; // Önceki içgörüyü gizle
                                 insightDisplay.textContent = ''; // Metni temizle
@@ -922,7 +1018,18 @@
                                 let chatHistory = [];
                                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                                 const payload = { contents: chatHistory };
-                                const apiKey = ""; // Canvas ortamı otomatik olarak API anahtarını sağlayacaktır.
+                                // BURAYA KENDİ GEMINI API ANAHTARINIZI YAPIŞTIRIN (5. YER)
+                                // Bir Google Cloud projesi oluşturup Gemini API'yi etkinleştirerek anahtar alabilirsiniz.
+                                // https://aistudio.google.com/app/apikey adresinden de alabilirsiniz.
+                                const apiKey = "AIzaSyDJ-2CwiuwJOSI8SoECbRBxjG830Rsrcm0"; // <-- BU SATIRI GÜNCELLEYİN!
+
+                                if (!apiKey || apiKey === "YOUR_API_KEY_HERE_5") {
+                                    apiErrorMessage.style.display = 'block';
+                                    loadingInsightIndicator.style.display = 'none';
+                                    insightDisplay.textContent = '';
+                                    return;
+                                }
+
                                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                                 try {
@@ -931,6 +1038,14 @@
                                         headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify(payload)
                                     });
+
+                                    if (!response.ok) {
+                                        const errorText = await response.text();
+                                        apiErrorMessage.textContent = `İçgörü API Hatası: ${response.status} - ${errorText.substring(0, 100)}...`;
+                                        apiErrorMessage.style.display = 'block';
+                                        return;
+                                    }
+
                                     const result = await response.json();
                                     if (result.candidates && result.candidates.length > 0 &&
                                         result.candidates[0].content && result.candidates[0].content.parts &&
@@ -944,8 +1059,8 @@
                                     }
                                 } catch (error) {
                                     console.error('API çağrısı hatası:', error);
-                                    insightDisplay.textContent = 'Bir hata oluştu, lütfen tekrar deneyin.';
-                                    insightDisplay.style.display = 'block';
+                                    apiErrorMessage.textContent = `İçgörü API çağrısı sırasında bir hata oluştu: ${error.message}`;
+                                    apiErrorMessage.style.display = 'block';
                                 } finally {
                                     loadingInsightIndicator.style.display = 'none';
                                 }
@@ -961,7 +1076,18 @@
                                 let chatHistory = [];
                                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                                 const payload = { contents: chatHistory };
-                                const apiKey = ""; 
+                                // BURAYA KENDİ GEMINI API ANAHTARINIZI YAPIŞTIRIN (6. YER)
+                                // Bir Google Cloud projesi oluşturup Gemini API'yi etkinleştirerek anahtar alabilirsiniz.
+                                // https://aistudio.google.com/app/apikey adresinden de alabilirsiniz.
+                                const apiKey = "AIzaSyDJ-2CwiuwJOSI8SoECbRBxjG830Rsrcm0"; // <-- BU SATIRI GÜNCELLEYİN!
+
+                                if (!apiKey || apiKey === "YOUR_API_KEY_HERE_6") {
+                                    apiErrorMessage.style.display = 'block';
+                                    loadingAdaptationIndicator.style.display = 'none';
+                                    adaptationDisplay.textContent = '';
+                                    return;
+                                }
+
                                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                                 try {
@@ -970,6 +1096,14 @@
                                         headers: { 'Content-Type': 'application/json' },
                                         body: JSON.stringify(payload)
                                     });
+
+                                    if (!response.ok) {
+                                        const errorText = await response.text();
+                                        apiErrorMessage.textContent = `Adaptasyon API Hatası: ${response.status} - ${errorText.substring(0, 100)}...`;
+                                        apiErrorMessage.style.display = 'block';
+                                        return;
+                                    }
+
                                     const result = await response.json();
                                     if (result.candidates && result.candidates.length > 0 &&
                                         result.candidates[0].content && result.candidates[0].content.parts &&
@@ -983,8 +1117,8 @@
                                     }
                                 } catch (error) {
                                     console.error('Modern adaptasyon API çağrısı hatası:', error);
-                                    adaptationDisplay.textContent = 'Bir hata oluştu, lütfen tekrar deneyin.';
-                                    adaptationDisplay.style.display = 'block';
+                                    apiErrorMessage.textContent = `Modern adaptasyon API çağrısı sırasında bir hata oluştu: ${error.message}`;
+                                    apiErrorMessage.style.display = 'block';
                                 } finally {
                                     loadingAdaptationIndicator.style.display = 'none';
                                 }
@@ -998,46 +1132,6 @@
                     }
                 });
             });
-
-            // Fonksiyon: Görsel üretimi ve ataması
-            async function generateAndSetImage(imgElement, imageLoadingIndicator, imagePrompt, isArchitecture = false) {
-                imageLoadingIndicator.style.display = 'block';
-                const placeholderSize = isArchitecture ? '600x400' : '400x300';
-                imgElement.src = `https://placehold.co/${placeholderSize}/e0e0e0/333333?text=Yükleniyor...`; // Geçici yüklenme görseli
-
-                const payload = { instances: { prompt: imagePrompt }, parameters: { "sampleCount": 1} };
-                const apiKey = ""; // Canvas ortamı otomatik olarak API anahtarını sağlayacaktır.
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error(`[ERROR] API HTTP Hatası: ${response.status} ${response.statusText} - ${errorText}`);
-                        imgElement.src = `https://placehold.co/${placeholderSize}/e0e0e0/333333?text=Hata+Oluştu (${response.status})`;
-                        return;
-                    }
-
-                    const result = await response.json();
-                    if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
-                        const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-                        imgElement.src = imageUrl;
-                    } else {
-                        imgElement.src = `https://placehold.co/${placeholderSize}/e0e0e0/333333?text=Görsel+Üretilemedi`;
-                    }
-                } catch (error) {
-                    console.error('Görsel API çağrısı sırasında bir hata oluştu:', error);
-                    imgElement.src = `https://placehold.co/${placeholderSize}/e0e0e0/333333?text=Hata+Oluştu`;
-                } finally {
-                    imageLoadingIndicator.style.display = 'none';
-                }
-            }
-
 
             // Modal kapatma olay dinleyicileri
             closeModal.addEventListener('click', () => {
